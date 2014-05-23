@@ -1,0 +1,20 @@
+{
+  "name": "MinerAdmin.js",
+  "version": "0.0.1",
+  "authors": [
+    "Kim <kimpersson88@gmail.com>"
+  ],
+  "main": "app.js",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1"
+  }
+}
