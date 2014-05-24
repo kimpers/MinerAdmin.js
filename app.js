@@ -8,7 +8,7 @@ var mongoskin = require('mongoskin');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
-var minerstatus = require('./routes/minerstatus')
+var miner = require('./routes/miner')
 
 var app = express();
 var db = mongoskin.db("mongodb://localhost:27017/integration_tests", {native_parser:false});
@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
-app.use('/minerstatus', minerstatus);
+app.use('/miner', miner);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
