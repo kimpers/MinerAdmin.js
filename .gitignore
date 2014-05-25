@@ -1,5 +1,8 @@
 *.swp
 *.swo
 node_modules/*
+node_modules/miner_api/node_modules/*
 public/bower_components/*
 public/.sass-cache/*
+
+!node_modules/miner_api/
