@@ -6,6 +6,10 @@ html
 		script(src='/bower_components/jquery/dist/jquery.js')
 		script(src='/javascripts/bootstrap.js')
 	body
-		div(class="navbar navbar-default" role="navigation")
-			button(type="button" class="btn btn-default navbar-btn") Sign in
-		block content
+		div(class="container-fluid")
+			div(class="row")
+				div(class="col-md-1")
+					p hello sidebar
+				div(class="col-md-11")
+					block content
+

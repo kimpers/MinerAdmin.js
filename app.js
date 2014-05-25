@@ -4,17 +4,21 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var mongoskin = require('mongoskin');
+var Parse = require('parse').Parse;
+
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var miner = require('./routes/miner');
 
 var app = express();
-var db = mongoskin.db("mongodb://localhost:27017/integration_tests", {native_parser:false});
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+app.set('json spaces', 2);
+
+// Setup Parse
+Parse.initialize("wPlZWRv5VWbY5ZM1VkeHyfxSYXAvBhEY2n20CjV1", "cTcCL3ewGe33rvLCwIBQ7TXpNmXWMBzD1oy3CPoC");
 
 app.use(favicon());
 app.use(logger('dev'));
@@ -26,7 +30,26 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
+// Prefetch miner info
+app.use('/miner/', function(req, res, next) {
+	req.Miner = Parse.Object.extend('Miner');
+	return next();
+});
+app.use('/miner/status', function(req, res, next) {
+	var q = new Parse.Query(req.Miner);
+	q.find({
+		success: function(miners) {
+			req.miners = miners;
+			return next();
+		},
+		error: function(err) {
+			console.error(err);
+			return next(err);
+		}
+	});
+});
 app.use('/miner', miner);
+
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
