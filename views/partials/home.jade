@@ -1,0 +1,38 @@
+h1 Status
+div(ng-repeat="miner in status")
+	div(class="table-responsive")
+		table(class="table table-striped table-bordered table-hover")
+			tr
+				th IP
+				th Pool
+				th Hash speed
+				th Accepted
+				th Rejected
+				th Hardware errors
+			tr(class="{{ poolStatus(miner[1].SUMMARY) }}")
+				td {{  miner[0] }}
+				td {{  miner[1].ACTIVE_POOL.URL.replace("stratum+tcp:\/\/", "")  }}
+				td {{  miner[1].SUMMARY["MHS 5s"] + ' MH/s'}}
+				td {{  miner[1].SUMMARY["Accepted"] }}
+				td {{  miner[1].SUMMARY["Rejected"] }}
+				td {{  miner[1].SUMMARY["Hardware Errors"] }}
+		table(class="table table-striped table-bordered table-hover")
+			tr
+				th GPU
+				th Temperature
+				th Fan percent
+				th Fan speed
+				th GPU speed
+				th Memory clock
+				th GPU activity
+				th Hash speed
+			tr(ng-repeat='dev in miner[1].DEVS' class="{{ gpuStatus(dev.Temperature) }}")
+				td {{  dev[ "GPU" ]  }}
+				td {{  dev[ "Temperature" ]  }}
+				td {{  dev[ "Fan Percent" ] + "%" }}
+				td {{  dev[ "Fan Speed" ] }}
+				td {{  dev[ "GPU Clock" ] }}
+				td {{  dev[ "Memory Clock" ] }}
+				td {{  dev[ "GPU Activity" ] + "%"  }}
+				td {{  dev[ "MHS 5s" ] }}
+		div(id="table-separator")

@@ -1,0 +1,20 @@
+h1 Settings
+h2 User
+form(action='/users' method='update')
+	label(for='current_password') Current password:
+	input(type='password', name='current_password')
+	br
+	label(for='new_password') New password:
+	input(type='password', name='new_password')
+	br
+	label(for='confirm_new_password') Confirm password:
+	input(type='password', name='confirm_new_password')
+	br
+	button(class="btn btn-primary", type="submit") Update user
+
+h2 Pools
+form(action='miner/pool' method='post')
+
+h2 Servers
+
+

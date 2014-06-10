@@ -6576,3 +6576,6 @@ button.close {
     display: none !important;
   }
 }
+div#table-separator {
+  height: 30px;
+}
