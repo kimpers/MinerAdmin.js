@@ -70,6 +70,9 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.set('json spaces', 2);
 
+// Set default global variables
+app.locals.css = { button_class: 'btn btn-primary' };
+
 
 app.get('/login', function(req, res){
 	var flash = req.flash('error')[0];

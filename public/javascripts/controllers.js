@@ -1,8 +1,9 @@
 var minerControllers = angular.module('minerControllers', []);
 
 minerControllers.controller('mainController', ['$scope', '$http', '$interval',
-		'$window', function($scope, $http, $interval, $window) {
-		$scope.message = 'Hello';
+		'$window','shared_data', function($scope, $http, $interval, $window, shared_data) {
+			console.log(shared_data);
+
 
 		//TODO Let user choose values for different statuses
 		$scope.gpuStatus = function(temp) {
@@ -27,6 +28,7 @@ minerControllers.controller('mainController', ['$scope', '$http', '$interval',
 				if(data.error == 'unauthenticated'){
 					$window.location.href = '/login';
 				} else {
+					shared_data.status = data;
 					$scope.status = data;
 				}
 			});
@@ -36,6 +38,19 @@ minerControllers.controller('mainController', ['$scope', '$http', '$interval',
 	}
 ]);
 minerControllers.controller('settingsController', ['$scope', '$http', '$interval',
-		'$window', function($scope, $http, $interval, $window) {
-			$scope.settings = 'hello';
+		'$window', 'shared_data', function($scope, $http, $interval, $window, shared_data) {
+			// If ww don't have the data we need fetch it ourselves
+			if(!shared_data.status) {
+				$http.get('/miner/status').success(function(data) {
+					if(data.error == 'unauthenticated'){
+						$window.location.href = '/login';
+					} else {
+						shared_data.status = data;
+						$scope.status  = data;
+					}
+				});
+			}else {
+				$scope.status  = shared_data.status;
+				console.dir($scope.status);
+			}
 }]);

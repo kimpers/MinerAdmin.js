@@ -10,10 +10,30 @@ form(action='/users' method='update')
 	label(for='confirm_new_password') Confirm password:
 	input(type='password', name='confirm_new_password')
 	br
-	button(class="btn btn-primary", type="submit") Update user
+	button(class='#{css.button_class}', type="submit") Update user
 
 h2 Pools
-form(action='miner/pool' method='post')
+h3 Add pool
+form(action='/miner/pool' method='post')
+	label(for='url') URL:
+	input(type='text', name='url')
+	br
+	label(for='username') Username:
+	input(type='text', name='username' )
+	br
+	label(for='password') Password:
+	input(type='password', name='password')
+	br
+	button(class='btn btn-primary', type='submit') Add pool
+
+h3 Change pools
+form(action='/miner/pool/current', method='post', ng-repeat='server in status')
+	label(for='pool_select') {{ server[0] }}:
+	input(type='hidden', value= '{{ server[0] }}')
+	select(id='pool_select')
+		option(ng-repeat='pool in status[ $index ][1].POOLS') {{pool.URL}}
+	button(class='btn btn-primary', type='submit') Change
+
 
 h2 Servers
 

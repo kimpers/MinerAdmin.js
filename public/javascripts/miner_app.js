@@ -1,6 +1,8 @@
-var minerApp = angular.module('minerApp', ['ngRoute', 'minerControllers']);
+var minerApp = angular.module('minerApp', ['ngRoute', 'minerControllers', 'minerApp.shared_data']);
 
-
+angular.module("minerApp.shared_data", []).factory('shared_data', function (){
+	return {};
+});
 
 minerApp.config(['$routeProvider',
   function($routeProvider) {
