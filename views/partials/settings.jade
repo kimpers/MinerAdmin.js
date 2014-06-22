@@ -1,9 +1,12 @@
 h1 Settings
+<div ng-bind-html="flash"></div>
 h2 User
 form(action='/users' method='update')
-	label(for='current_password') Current password:
-	input(type='password', name='current_password')
-	br
+	div(class="container-fluid")
+		div(class="row")
+				label(for='current_password') Current password:
+				input(type='password', name='current_password')
+	
 	label(for='new_password') New password:
 	input(type='password', name='new_password')
 	br
@@ -12,29 +15,13 @@ form(action='/users' method='update')
 	br
 	button(class='#{css.button_class}', type="submit") Update user
 
-h2 Pools
-h3 Add pool
-form(action='/miner/pool' method='post')
-	label(for='url') URL:
-	input(type='text', name='url')
-	br
-	label(for='username') Username:
-	input(type='text', name='username' )
-	br
-	label(for='password') Password:
-	input(type='password', name='password')
-	br
-	button(class='btn btn-primary', type='submit') Add pool
-
-h3 Change pools
-form(action='/miner/pool/current', method='post', ng-repeat='server in status')
-	label(for='pool_select') {{ server[0] }}:
-	input(type='hidden', value= '{{ server[0] }}')
-	select(id='pool_select')
-		option(ng-repeat='pool in status[ $index ][1].POOLS') {{pool.URL}}
-	button(class='btn btn-primary', type='submit') Change
-
-
 h2 Servers
-
+form(ng-submit='processAddMinerForm()')
+	label(for='ip') IP:
+	input(type='text', name='ip', ng-model='addMinerForm.ip')
+	br
+	label(for='port') Port:
+	input(type='text', name='port', ng-model='addMinerForm.port')
+	br
+	button(class='#{css.button_class}', type='submit') Add
 

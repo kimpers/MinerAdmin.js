@@ -28,12 +28,17 @@ router.get('/status', function(req, res) {
 	});
 });
 
-// TODO FIX
-router.put('/', function(req,res) {
-	if(!req.body.url || !req.body.port || !req.body.key)
-		res.send(500, "Invalid request");
-	console.dir(res);
-	res.send(miner);
+router.post('/', function(req,res) {
+	if(!req.body.ip || !req.body.port)
+		res.json({status: 'error'});
+	else {
+		req.db.collection('miners').insert(req.body, function (err, results) {
+			if(err)
+				res.json({status: 'error'});
+			else
+				res.json({status: 'success'});
+		});
+	}
 });
 
 module.exports = router;

@@ -1,9 +1,8 @@
 var minerControllers = angular.module('minerControllers', []);
 
 minerControllers.controller('mainController', ['$scope', '$http', '$interval',
-		'$window','shared_data', function($scope, $http, $interval, $window, shared_data) {
-			console.log(shared_data);
-
+		'$window','shared_data','shared_functions',
+		function($scope, $http, $interval, $window, shared_data, shared_functions) {
 
 		//TODO Let user choose values for different statuses
 		$scope.gpuStatus = function(temp) {
@@ -38,19 +37,28 @@ minerControllers.controller('mainController', ['$scope', '$http', '$interval',
 	}
 ]);
 minerControllers.controller('settingsController', ['$scope', '$http', '$interval',
-		'$window', 'shared_data', function($scope, $http, $interval, $window, shared_data) {
-			// If ww don't have the data we need fetch it ourselves
-			if(!shared_data.status) {
-				$http.get('/miner/status').success(function(data) {
-					if(data.error == 'unauthenticated'){
-						$window.location.href = '/login';
+		'$window', 'shared_data', 'shared_functions',
+		function($scope, $http, $interval, $window, shared_data, shared_functions) {
+			$scope.addMinerForm = {};
+			$scope.processAddMinerForm = function (){
+				var data = {
+					ip: $scope.addMinerForm.ip,
+					port: $scope.addMinerForm.port
+				};
+				$http.post('/miner', data).success(function (data){
+					if(data.status == 'success'){
+						$scope.flash =  shared_functions.flash('Successfully added miner', 'success');
 					} else {
-						shared_data.status = data;
-						$scope.status  = data;
+						$scope.flash = shared_functions.flash('Failed to add miner', 'danger');
 					}
 				});
-			}else {
-				$scope.status  = shared_data.status;
-				console.dir($scope.status);
-			}
+			};
+			// If we don't have the data we need fetch it ourselves
+			$http.get('/miner/pools').success(function(data) {
+				if(data.error == 'unauthenticated'){
+					$window.location.href = '/login';
+				} else {
+					$scope.pools  = data;
+				}
+			});
 }]);

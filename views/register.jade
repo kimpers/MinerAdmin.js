@@ -1,0 +1,29 @@
+doctype html
+html
+	head
+		link(rel='stylesheet', href='/stylesheets/style.css')
+		link(rel='stylesheet', href='/stylesheets/login.css')
+		script(src='/bower_components/jquery/dist/jquery.js')
+		script(src='/javascripts/bootstrap.js')
+	body
+		div(class="container")
+			if error
+				div(class="alert alert-danger fade in")
+					button(class="close", data-dismiss="alert") x
+					p #{error}
+			div(class="content")
+				h1 Register account
+				form(action="/login/register", method="post")
+					div(class="row")
+						label(for="username") Username:
+						input(type="text", name="username")
+					div(class="row")
+						label(for="password") Password:
+						input(type="password", name="password")
+					div(class="row")
+						label(for="password") Confirm password:
+						input(type="password", name="confirm_password")
+					div(class="row")
+						button(class="#{css.button_class}", type="submit") Register
+
+					

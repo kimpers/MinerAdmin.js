@@ -74,9 +74,59 @@ app.set('json spaces', 2);
 app.locals.css = { button_class: 'btn btn-primary' };
 
 
+app.use('*', function(req, res, next) {
+	req.db = db;
+	return next();
+});
+
+
+app.use('/login', function(req, res, next){
+	users = req.db.collection('users').find().toArray(function (err, result) {
+		if(err)
+			return next(err);
+		if(result.length == 0){
+			req.firstTime = true;
+		} else
+			req.firstTime = false;
+
+		return next();
+	});
+});
 app.get('/login', function(req, res){
 	var flash = req.flash('error')[0];
-	res.render('login', {error: flash});
+	var view;
+
+	// Only show register screen when no user account is registered
+	if(req.firstTime)
+		view = 'register';
+	else
+		view = 'login'
+	res.render(view, {error: flash});
+});
+app.post('/login/register', function (req, res){
+	if(req.firstTime) {
+		var user = {};
+		if(req.body.password != req.body.confirm_password)
+			res.render('register', {error: 'Password and password confirmation not the same'});
+		else {
+			user.username = req.body.username;
+			bcrypt.hash(req.body.password, null, null, function(err, hash) {
+				if(err)
+					res.render('register', {error: 'Failed to encrypt password, please try again'});
+				user.password = hash;
+				db.collection('users').insert(user, function (err, result){
+					if(err){
+						console.error(err);
+						res.render('register', {error: 'Failed to insert into database, please try again'});
+					} else {
+						res.redirect('/login');
+					}
+				});
+			});
+		}
+
+	}
+
 });
 app.post('/login',
 	passport.authenticate('local', {
@@ -84,6 +134,7 @@ app.post('/login',
 			failureRedirect: '/login',
 			failureFlash: true })
 );
+
 
 // API auth
 app.use('/miner', function (req, res, next) {
